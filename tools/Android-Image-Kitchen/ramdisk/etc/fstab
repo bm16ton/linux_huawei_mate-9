@@ -1,0 +1,7 @@
+proc		/proc		proc	defaults	0	0
+devpts		/dev/pts	devpts	defaults,gid=5,mode=620	0	0
+#tmpfs		/dev/shm	tmpfs	mode=0777	0	0
+tmpfs /tmp tmpfs defaults,nosuid 0 0
+tmpfs		/run		tmpfs	mode=0755,nosuid,nodev	0	0
+sysfs		/sys		sysfs	defaults	0	0
+UUID=6d3c659e-3841-4427-ba88-0e8d02e4e2c4 /               ext4    errors=remount-ro 0       1

@@ -1,0 +1,6 @@
+on fs
+	mkdir /modem_fw
+	wait /dev/block/bootdevice/by-name/modem_fw
+	mount ext4 /dev/block/bootdevice/by-name/modem_fw /modem_fw
+	modem_fs_chk 4096
+	

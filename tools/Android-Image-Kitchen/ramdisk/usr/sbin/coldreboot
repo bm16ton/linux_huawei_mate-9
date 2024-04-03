@@ -1,0 +1,6 @@
+#!/bin/sh
+NOKEXECFILE=/no-kexec-reboot
+
+/bin/rm -f $NOKEXECFILE
+touch $NOKEXECFILE
+/sbin/reboot $*

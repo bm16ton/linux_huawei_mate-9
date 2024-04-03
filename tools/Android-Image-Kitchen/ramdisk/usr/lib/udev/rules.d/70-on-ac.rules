@@ -1,0 +1,4 @@
+#SUBSYSTEM=="power_supply", ATTR{online}=="1", RUN+="/usr/local/bin/use-power"
+#SUBSYSTEM=="power_supply", ATTR{online}=="0", RUN+="/usr/local/bin/save-power"
+SUBSYSTEM=="input", KERNEL=="event0", ENV{ID_PATH}=="platform-gpio_keys_polled", ATTRS{keys}=="*219*", RUN+="/usr/local/bin/test4"
+

@@ -1,0 +1,5 @@
+ATTRS{idProduct}=="6010", ATTRS{idVendor}=="0403", MODE="777", GROUP="dialout"
+ATTRS{idProduct}=="6011", ATTRS{idVendor}=="0403", MODE="777", GROUP="dialout"
+ATTRS{idProduct}=="6001", ATTRS{idVendor}=="0403", MODE="777", GROUP="dialout"
+ATTRS{idProduct}=="6014", ATTRS{idVendor}=="0403", MODE="777", GROUP="dialout"
+ATTRS{idProduct}=="6041", ATTRS{idVendor}=="0403", MODE="777", GROUP="dialout"

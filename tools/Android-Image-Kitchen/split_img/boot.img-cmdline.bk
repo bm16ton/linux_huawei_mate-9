@@ -1,0 +1,1 @@
+loglevel=4 initcall_debug=n page_tracker=on slub_min_objects=16 androidboot.selinux=enforcing

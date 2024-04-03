@@ -1,0 +1,104 @@
+/{
+		dpe: dpe@E8600000 {
+			compatible = "hisilicon,hi3660-dpe";
+			status = "ok";
+
+			reg = <0x0 0xE8600000 0x0 0x80000>,
+					<0x0 0xFFF35000 0 0x1000>,
+					<0x0 0xFFF0A000 0 0x1000>,
+					<0x0 0xFFF31000 0 0x1000>,
+					<0x0 0xE86C0000 0 0x10000>;
+			interrupts = <0 245 4>;
+
+		clocks = <&aclk_gate_dss>, <&pclk_gate_dss>, <&clk_gate_edc0>, <&clk_gate_ldi0>, <&clk_gate_ldi1>,
+			<&clk_gate_dss_axi_mm>, <&pclk_gate_mmbuf>,
+			<&clk_gate_txdphy0_ref>, <&clk_gate_txdphy1_ref>, <&clk_gate_txdphy0_cfg>, <&clk_gate_txdphy1_cfg>,
+			<&pclk_gate_dsi0>, <&pclk_gate_dsi1>, <&pclk_gate_pctrl>;
+		clock-names = "aclk_dss", "pclk_dss", "clk_edc0", "clk_ldi0", "clk_ldi1",
+			"clk_dss_axi_mm", "pclk_mmbuf",
+			"clk_txdphy0_ref", "clk_txdphy1_ref", "clk_txdphy0_cfg", "clk_txdphy1_cfg",
+			"pclk_dsi0", "pclk_dsi1", "pclk_pctrl";
+
+			dma-coherent;
+
+			port {
+				dpe_out: endpoint {
+					remote-endpoint = <&dsi_in>;
+				};
+			};
+
+			iommu_info {
+				start-addr = <0x8000>;
+				size = <0xbfff8000>;
+			};
+		};
+
+		dsi: dsi@E8601000 {
+			compatible = "hisilicon,hi3660-dsi";
+			status = "ok";
+
+			reg = <0 0xE8601000 0 0x7F000>,
+					<0 0xFFF35000 0 0x1000>;
+
+			clocks = <&clk_gate_txdphy0_ref>, <&clk_gate_txdphy1_ref>, <&clk_gate_txdphy0_cfg>, <&clk_gate_txdphy1_cfg>,
+				<&pclk_gate_dsi0>, <&pclk_gate_dsi1>;
+			clock-names = "clk_txdphy0_ref", "clk_txdphy1_ref", "clk_txdphy0_cfg", "clk_txdphy1_cfg",
+				"pclk_dsi0", "pclk_dsi1";
+
+			#address-cells = <1>;
+			#size-cells = <0>;
+			mux-gpio = <&gpio2 4 0>;
+
+			ports {
+				#address-cells = <1>;
+				#size-cells = <0>;
+
+				port@0 {
+					reg = <0>;
+					dsi_in: endpoint {
+						remote-endpoint = <&dpe_out>;
+					};
+				};
+
+				port@1 {
+					#address-cells = <1>;
+					#size-cells = <0>;
+					reg = <1>;
+
+					dsi_out0: endpoint@0 {
+						reg = <0>;
+						remote-endpoint = <&dsi_out0>;
+					};
+
+					dsi_out1: endpoint@1 {
+						reg = <1>;
+						remote-endpoint = <&panel0_in>;
+					};
+				};
+			};
+
+			panel@1 {
+				compatible = "hisilicon,mipi-hikey,mipi_lg_TD4322_6P0_chicago";
+				lcd-bl-type = <0x04>;
+				lcd-display-type = <0x10>;
+				lcd-ifbc-type = <0x00>;
+				gpios = <0x3f 0x05 0x00 0x49 0x05 0x00 0x229 0x00 0x00 0x62 0x00 0x00 0x228 0x07 0x00>;
+				gpio_nums = <0x7d 0x25 0x58 0x28 0x17 0x21 0x41>;
+				lcdio-vcc-supply = <0x250>;
+				lcdanalog-vcc-supply = <0x24f>;
+				pinctrl-names = "default\0idle";
+				pinctrl-0 = <0x262 0x263 0x264 0x265 0x266 0x267 0x268 0x269>;
+				pinctrl-1 = <0x26a 0x26b 0x26c 0x26d 0x26e 0x26f 0x270 0x271>;
+				vsp-vsn-voltage = <0x0f>;
+				fpga_flag = <0x00>;
+				status = "ok";
+				};
+
+				port {
+					panel0_in: endpoint {
+						remote-endpoint = <&dsi_out1>;
+					};
+				};
+			};
+		};
+

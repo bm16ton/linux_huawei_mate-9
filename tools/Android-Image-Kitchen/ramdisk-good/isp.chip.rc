@@ -1,0 +1,9 @@
+on boot
+    mkdir -p /lib/firmware/ 0666 root root
+    chown media media /vendor/firmware/isp_fw.elf
+    chown media media /vendor/firmware/isp_bw.elf
+    chmod 0400 /vendor/firmware/isp_fw.elf
+    chmod 0400 /vendor/firmware/isp_bw.elf
+    symlink /vendor/firmware/isp_fw.elf /lib/firmware/isp_fw.elf
+    symlink /vendor/firmware/isp_bw.elf /lib/firmware/isp_bw.elf
+

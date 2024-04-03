@@ -1,0 +1,2 @@
+SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", RUN+="/usr/local/bin/iw-name.sh"
+SUBSYSTEM=="net", ACTION=="remove", DRIVERS=="?*", RUN+="/usr/local/bin/iw-name.sh"
