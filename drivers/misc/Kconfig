@@ -150,6 +150,14 @@ config SGI_IOC4
 	  If you have an SGI Altix with an IOC4-based card say Y.
 	  Otherwise say N.
 
+config FDT_LOADER
+	bool "Device Tree Loader"
+	select OF
+	select OF_EARLY_FLATTREE
+	help
+	 This module loads a Device Tree Blob using request_firmware().
+	 For platforms that doesn't have Device Tree support.
+
 config TIFM_CORE
 	tristate "TI Flash Media interface support"
 	depends on PCI
