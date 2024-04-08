@@ -74,6 +74,7 @@ void of_device_make_bus_id(struct device *dev)
 	struct device_node *node = dev->of_node;
 	const __be32 *reg;
 	u64 addr;
+	const __be32 *addrp;
 
 	/* Construct the name, using parent nodes if necessary to ensure uniqueness */
 	while (node->parent) {
@@ -82,13 +83,17 @@ void of_device_make_bus_id(struct device *dev)
 		 * uniqueness as we need. Make it the first component and return
 		 */
 		reg = of_get_property(node, "reg", NULL);
-		if (reg && (addr = of_translate_address(node, reg)) != OF_BAD_ADDR) {
-			dev_set_name(dev, dev_name(dev) ? "%llx.%s:%s" : "%llx.%s",
-				     (unsigned long long)addr, node->name,
-				     dev_name(dev));
-			return;
+		if (reg) {
+		if (of_can_translate_address(node)) {
+			addr = of_translate_address(node, reg);
+		} else {
+			addrp = of_get_address(node, 0, NULL, NULL);
+			if (addrp)
+				addr = of_read_number(addrp, 1);
+			else
+				addr = OF_BAD_ADDR;
 		}
-
+	}
 		/* format arguments only used if dev_name() resolves to NULL */
 		dev_set_name(dev, dev_name(dev) ? "%s:%s" : "%s",
 			     strrchr(node->full_name, '/') + 1, dev_name(dev));
@@ -115,8 +120,9 @@ struct platform_device *of_device_alloc(struct device_node *np,
 		return NULL;
 
 	/* count the io and irq resources */
-	while (of_address_to_resource(np, num_reg, &temp_res) == 0)
-		num_reg++;
+	if (of_can_translate_address(np))
+		while (of_address_to_resource(np, num_reg, &temp_res) == 0)
+			num_reg++;
 	num_irq = of_irq_count(np);
 
 	/* Populate the resource table */

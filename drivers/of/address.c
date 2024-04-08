@@ -12,6 +12,7 @@
 /* Max address size we deal with */
 #define OF_MAX_ADDR_CELLS	4
 #define OF_CHECK_ADDR_COUNT(na)	((na) > 0 && (na) <= OF_MAX_ADDR_CELLS)
+#define OF_CHECK_ADDR_COUNT(na)	((na) > 0 && (na) <= OF_MAX_ADDR_CELLS)
 #define OF_CHECK_COUNTS(na, ns)	(OF_CHECK_ADDR_COUNT(na) && (ns) > 0)
 
 static struct of_bus *of_match_bus(struct device_node *np);
@@ -627,6 +628,25 @@ u64 of_translate_dma_address(struct device_node *dev, const __be32 *in_addr)
 	return __of_translate_address(dev, in_addr, "dma-ranges");
 }
 EXPORT_SYMBOL(of_translate_dma_address);
+
+bool of_can_translate_address(struct device_node *dev)
+{
+	struct device_node *parent;
+	struct of_bus *bus;
+	int na, ns;
+
+	parent = of_get_parent(dev);
+	if (parent == NULL)
+		return false;
+
+	bus = of_match_bus(parent);
+	bus->count_cells(dev, &na, &ns);
+
+	of_node_put(parent);
+
+	return OF_CHECK_COUNTS(na, ns);
+}
+EXPORT_SYMBOL(of_can_translate_address);
 
 const __be32 *of_get_address(struct device_node *dev, int index, u64 *size,
 		    unsigned int *flags)
