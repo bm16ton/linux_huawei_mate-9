@@ -1014,7 +1014,7 @@ static ssize_t bootmode_store(struct device *dev,
 
 	return 0x60;
 }
-static DEVICE_ATTR(bootmode, 0664, NULL, bootmode_store );
+static DEVICE_ATTR(bootmode, S_IWUSR, NULL, bootmode_store);
 
 static ssize_t jigpin_ctrl_store(struct device *dev,
                           struct device_attribute *attr, const char *buf, size_t size)
@@ -1230,7 +1230,7 @@ static ssize_t switchuart_store(struct device *dev,
     return ret;
 }
 
-static DEVICE_ATTR(switchuart, S_IRUGO | S_IWUSR, switchuart_store, NULL);
+static DEVICE_ATTR(switchuart, S_IWUSR, NULL, switchuart_store);
 /****************************************************************************
   Function:     fcp_adapter_reset
   Description:  reset adapter
